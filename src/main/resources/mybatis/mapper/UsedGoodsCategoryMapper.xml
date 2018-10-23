@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.shurencircle.mapper.UsedGoodsCategoryMapper">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="UsedGoodsCategory" id="usedGoodsCategoryMap">
+        <result property="id" column="id"/>
+        <result property="categoryName" column="category_name"/>
+        <result property="isEnable" column="is_enable"/>
+        <result property="parentCategoryId" column="parent_category_id"/>
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+
+
+    <insert id="addUsedGoodsCategory" parameterType="UsedGoodsCategory">
+        insert into  `used_goods_category` (
+                    `category_name`,
+                    `is_enable`,
+                    `parent_category_id`,
+                    `create_time`
+                )
+        values(
+                    #{categoryName},
+                    #{isEnable},
+                    #{parentCategoryId},
+                    #{createTime}
+                )
+
+    </insert>
+
+
+    <select id="queryAll" resultMap="usedGoodsCategoryMap">
+       select * from  `used_goods_category` where
+        <if test="parentCategoryId != null and parentCategoryId!='' and parentCategoryId!=-1">
+            `parent_category_id` = #{parentCategoryId}
+        </if>
+        <if test="parentCategoryId == null or parentCategoryId==-1">
+            `parent_category_id` is null
+        </if>
+
+   </select>
+
+    <select id="queryById" resultMap="usedGoodsCategoryMap">
+       select * from  `used_goods_category` where `id`=#{id}
+   </select>
+
+
+    <update id="updateUsedGoodsCategory" parameterType="UsedGoodsCategory">
+    update  `used_goods_category`
+    <trim prefix="set " suffixOverrides=","  suffix=" where id=#{id}">
+        <if test="categoryName != null and categoryName != ''">
+            `category_name` = #{categoryName},
+        </if>
+        <if test="isEnable != null">
+            `is_enable` = #{isEnable},
+        </if>
+        <if test="parentCategoryId != null">
+            `parent_category_id` = #{parentCategoryId},
+        </if>
+    </trim>
+    </update>
+
+
+    <update id="updateCategoryEnable" parameterType="UsedGoodsCategory">
+         update  `used_goods_category` set
+          `is_enable` = #{isEnable}
+          where id=#{id} or  `parent_category_id`=#{id}
+    </update>
+
+
+
+    <delete id="deleteById" parameterType="Integer">
+        delete from  `used_goods_category` where id=#{id} or `parent_category_id` =#{id}
+    </delete>
+
+</mapper>

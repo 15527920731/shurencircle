@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.shurencircle.mapper.UsedGoodsMapper">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="UsedGoods" id="usedGoodsMap">
+        <result property="id" column="id"/>
+        <result property="address" column="address"/>
+        <result property="categoryOneId" column="category_one_id"/>
+        <result property="categoryTwoId" column="category_two_id"/>
+        <result property="chengSe" column="cheng_se"/>
+        <result property="content" column="content"/>
+        <result property="deliveryMoney" column="delivery_money"/>
+        <result property="deliveryType" column="delivery_type"/>
+        <result property="goodsName" column="goods_name"/>
+        <result property="imgPath" column="img_path"/>
+        <result property="isEnable" column="is_enable"/>
+        <result property="memberId" column="member_id"/>
+        <result property="releaseTime" column="release_time"/>
+        <result property="sortTime" column="sort_time"/>
+        <result property="status" column="status"/>
+        <result property="suitAge" column="suit_age"/>
+        <result property="videoPath" column="video_path"/>
+        <result property="releaseType" column="release_type"/>
+    </resultMap>
+
+
+    <insert id="addUsedGoods" parameterType="UsedGoods">
+        insert into  `used_goods` (
+                    `address`,
+                    `category_one_id`,
+                    `category_two_id`,
+                    `cheng_se`,
+                    `content`,
+                    `delivery_money`,
+                    `delivery_type`,
+                    `goods_name`,
+                    `img_path`,
+                    `is_enable`,
+                    `member_id`,
+                    `release_time`,
+                    `sort_time`,
+                    `status`,
+                    `suit_age`,
+                    `video_path`,
+                    `release_type`
+                )
+        values(
+                    #{address},
+                    #{categoryOneId},
+                    #{categoryTwoId},
+                    #{chengSe},
+                    #{content},
+                    #{deliveryMoney},
+                    #{deliveryType},
+                    #{goodsName},
+                    #{imgPath},
+                    #{isEnable},
+                    #{memberId},
+                    #{releaseTime},
+                    #{sortTime},
+                    #{status},
+                    #{suitAge},
+                    #{videoPath},
+                    #{releaseType}
+                )
+    </insert>
+
+
+    <select id="queryAll" resultMap="usedGoodsMap">
+       select * from  `used_goods`
+   </select>
+
+
+    <update id="updateUsedGoods" parameterType="UsedGoods">
+    update  `used_goods`
+    <trim prefix="set " suffixOverrides=","  suffix=" where id=#{id}">
+        <if test="address != null and address != ''">
+            `address` = #{address},
+        </if>
+        <if test="categoryOneId != null ">
+            `category_one_id` = #{categoryOneId},
+        </if>
+        <if test="categoryTwoId != null">
+            `category_two_id` = #{categoryTwoId},
+        </if>
+        <if test="chengSe != null and chengSe != ''">
+            `cheng_se` = #{chengSe},
+        </if>
+        <if test="content != null and content != ''">
+            `content` = #{content},
+        </if>
+        <if test="deliveryMoney != null ">
+            `delivery_money` = #{deliveryMoney},
+        </if>
+        <if test="deliveryType != null ">
+            `delivery_type` = #{deliveryType},
+        </if>
+        <if test="goodsName != null and goodsName != ''">
+            `goods_name` = #{goodsName},
+        </if>
+        <if test="imgPath != null and imgPath != ''">
+            `img_path` = #{imgPath},
+        </if>
+        <if test="isEnable != null ">
+            `is_enable` = #{isEnable},
+        </if>
+        <if test="memberId != null ">
+            `member_id` = #{memberId},
+        </if>
+        <if test="releaseTime != null and releaseTime != ''">
+            `release_time` = #{releaseTime},
+        </if>
+        <if test="sortTime != null and sortTime != ''">
+            `sort_time` = #{sortTime},
+        </if>
+        <if test="status != null ">
+            `status` = #{status},
+        </if>
+        <if test="suitAge != null and suitAge != ''">
+            `suit_age` = #{suitAge},
+        </if>
+        <if test="videoPath != null and videoPath != ''">
+            `video_path` = #{videoPath},
+        </if>
+        <if test="releaseType != null and releaseType != ''">
+            `release_type` = #{releaseType},
+        </if>
+    </trim>
+    </update>
+
+
+    <delete id="deleteById" parameterType="Integer">
+        delete from  `used_goods` where id=#{id}
+    </delete>
+
+</mapper>

@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.shurencircle.mapper.RecommendMapper">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="Recommend" id="recommendMap">
+        <result property="id" column="id"/>
+        <result property="floor" column="floor"/>
+        <result property="imgPath" column="img_path"/>
+        <result property="isEnable" column="is_enable"/>
+        <result property="recommendName" column="recommend_name"/>
+        <result property="recommendType" column="recommend_type"/>
+        <result property="sequence" column="sequence"/>
+        <result property="url" column="url"/>
+        <result property="createTime" column="create_time"/>
+        <result property="usedGoodsId" column="used_goods_id"/>
+    </resultMap>
+
+
+    <insert id="addRecommend" parameterType="Recommend">
+        insert into  `recommend` (
+                    `floor`,
+                    `img_path`,
+                    `is_enable`,
+                    `recommend_name`,
+                    `recommend_type`,
+                    `sequence`,
+                    `url`,
+                    `used_goods_id`,
+                    `create_time`
+                )
+        values(
+                    #{floor},
+                    #{imgPath},
+                    #{isEnable},
+                    #{recommendName},
+                    #{recommendType},
+                    #{sequence},
+                    #{url},
+                    #{usedGoodsId},
+                    #{createTime}
+                )
+    </insert>
+
+
+    <select id="queryAll" resultMap="recommendMap">
+        <if test="type==1">
+       select * from  `recommend` where  `used_goods_id` is null
+        </if>
+        <if test="type==2">
+            select * from  `recommend` where `used_goods_id` is not null
+        </if>
+
+   </select>
+
+    <select id="queryRecommendById" resultMap="recommendMap">
+       select * from  `recommend` where `id`=#{id}
+   </select>
+
+
+    <update id="updateRecommend" parameterType="Recommend">
+    update  `recommend`
+    <trim prefix="set " suffixOverrides=","  suffix=" where id=#{id}">
+
+        <if test="floor != null">
+            `floor` = #{floor},
+        </if>
+        <if test="imgPath != null and imgPath != ''">
+            `img_path` = #{imgPath},
+        </if>
+        <if test="isEnable != null">
+            `is_enable` = #{isEnable},
+        </if>
+        <if test="recommendName != null and recommendName != ''">
+            `recommend_name` = #{recommendName},
+        </if>
+        <if test="recommendType != null">
+            `recommend_type` = #{recommendType},
+        </if>
+        <if test="sequence != null">
+            `sequence` = #{sequence},
+        </if>
+        <if test="url != null and url != ''">
+            `url` = #{url},
+        </if>
+        <if test="usedGoodsId != null">
+            `used_goods_id` = #{usedGoodsId},
+        </if>
+        <if test="createTime != null">
+            `create_time` = #{createTime},
+        </if>
+    </trim>
+    </update>
+
+
+    <delete id="deleteById" parameterType="Integer">
+        delete from  `recommend` where id=#{id}
+    </delete>
+
+</mapper>

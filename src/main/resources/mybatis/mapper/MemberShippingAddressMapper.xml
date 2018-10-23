@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.shurencircle.mapper.MemberShippingAddressMapper">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="MemberShippingAddress" id="memberShippingAddressMap" >
+        <result property="id" column="id"/>
+        <result property="city" column="city"/>
+        <result property="createTime" column="create_time"/>
+        <result property="isDefault" column="is_default"/>
+        <result property="lastUpdateTime" column="last_update_time"/>
+        <result property="memberId" column="member_id"/>
+        <result property="province" column="province"/>
+        <result property="shippingName" column="shipping_name"/>
+        <result property="shippingPhone" column="shipping_phone"/>
+        <association property="member" column="member_id"  javaType="Member">
+          <!-- column是数据库查出来的字段名，property是对应实体类属性名-->
+            <id column="mid" property="id"/>
+            <result  column="nick_name" property="nickName"/>
+        </association>
+    </resultMap>
+
+
+    <insert id="addMemberShippingAddress" parameterType="MemberShippingAddress">
+        insert into  `member_shipping_address` (
+                    `city`,
+                    `create_time`,
+                    `is_default`,
+                    `last_update_time`,
+                    `member_id`,
+                    `province`,
+                    `shipping_name`,
+                    `shipping_phone`
+                )
+        values(
+                    #{city},
+                    #{createTime},
+                    #{isDefault},
+                    #{lastUpdateTime},
+                    #{memberId},
+                    #{province},
+                    #{shippingName},
+                    #{shippingPhone}
+                )
+    </insert>
+
+
+    <select id="queryAll" resultMap="memberShippingAddressMap">
+       select * from  `member_shipping_address` where `member_id`=#{id}
+   </select>
+
+    <select id="queryByMId" resultMap="memberShippingAddressMap">
+       select a.*,m.id as mid,m.nick_name as nick_name from  `member_shipping_address` a ,`member` m
+       where a.member_id=m.id and a.`member_id`=#{id} order by a.create_time
+   </select>
+
+
+    <update id="updateMemberShippingAddress" parameterType="MemberShippingAddress">
+    update  `member_shipping_address`
+    <trim prefix="set " suffixOverrides=","  suffix=" where id=#{id}">
+        <if test="city != null and city != ''">
+            `city` = #{city},
+        </if>
+        <if test="createTime != null and createTime != ''">
+            `create_time` = #{createTime},
+        </if>
+        <if test="isDefault != null">
+            `is_default` = #{isDefault},
+        </if>
+        <if test="lastUpdateTime != null and lastUpdateTime != ''">
+            `last_update_time` = #{lastUpdateTime},
+        </if>
+        <if test="memberId != null and memberId != ''">
+            `member_id` = #{memberId},
+        </if>
+        <if test="province != null and province != ''">
+            `province` = #{province},
+        </if>
+        <if test="shippingName != null and shippingName != ''">
+            `shipping_name` = #{shippingName},
+        </if>
+        <if test="shippingPhone != null and shippingPhone != ''">
+            `shipping_phone` = #{shippingPhone},
+        </if>
+    </trim>
+    </update>
+
+
+    <delete id="deleteById" parameterType="Integer">
+        delete from  `member_shipping_address` where id=#{id}
+    </delete>
+
+</mapper>

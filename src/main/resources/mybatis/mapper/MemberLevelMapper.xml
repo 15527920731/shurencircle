@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.shurencircle.mapper.MemberLevelMapper">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="MemberLevel" id="memberLevelMap">
+        <result property="id" column="id"/>
+        <result property="isEnable" column="is_enable"/>
+        <result property="levelIcon" column="level_icon"/>
+        <result property="levelName" column="level_name"/>
+        <result property="maxNum" column="max_num"/>
+        <result property="minNum" column="min_num"/>
+    </resultMap>
+
+
+    <insert id="addMemberLevel" parameterType="MemberLevel">
+        insert into  `member_level` (
+                    `is_enable`,
+                    `level_icon`,
+                    `level_name`,
+                    `max_num`,
+                    `min_num`
+                )
+        values(
+                    #{isEnable},
+                    #{levelIcon},
+                    #{levelName},
+                    #{maxNum},
+                    #{minNum}
+                )
+
+
+    </insert>
+
+
+    <select id="queryAll" resultMap="memberLevelMap">
+       select * from  `member_level`
+   </select>
+
+
+    <select id="queryMemberLevelByLevelBy" resultMap="memberLevelMap">
+       select * from  `member_level` where `id`=#{id}
+   </select>
+
+    <update id="updateMemberLevel" parameterType="MemberLevel">
+    update  `member_level`
+    <trim prefix="set " suffixOverrides=","  suffix=" where id=#{id}">
+        <if test="isEnable != null">
+            `is_enable` = #{isEnable},
+        </if>
+        <if test="levelIcon != null and levelIcon != ''">
+            `level_icon` = #{levelIcon},
+        </if>
+        <if test="levelName != null and levelName != ''">
+            `level_name` = #{levelName},
+        </if>
+        <if test="maxNum != null">
+            `max_num` = #{maxNum},
+        </if>
+        <if test="minNum != null">
+            `min_num` = #{minNum},
+        </if>
+    </trim>
+    </update>
+
+
+    <delete id="deleteById" parameterType="Integer">
+        delete from  `member_level` where id=#{id}
+    </delete>
+
+</mapper>

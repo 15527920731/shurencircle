@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.shurencircle.mapper.MemberMapper">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="Member" id="memberMap">
+        <result property="id" column="id"/>
+        <result property="avatarUrl" column="avatar_url"/>
+        <result property="balanceNum" column="balance_num"/>
+        <result property="city" column="city"/>
+        <result property="gender" column="gender"/>
+        <result property="inviteNum" column="invite_num"/>
+        <result property="isEnable" column="is_enable"/>
+        <result property="isPartner" column="is_partner"/>
+        <result property="memberLevelId" column="member_level_id"/>
+        <result property="nickName" column="nick_name"/>
+        <result property="openId" column="open_id"/>
+        <result property="phone" column="phone"/>
+        <result property="registerTime" column="register_time"/>
+        <result property="totalNum" column="total_num"/>
+        <result property="zengSongNum" column="zeng_song_num"/>
+        <result property="memberType" column="member_type"/>
+        <result property="isPhoneAuth" column="is_phone_auth"/>
+        <result property="code" column="code"/>
+        <association property="memberLevel" javaType="MemberLevel">
+            <id column="lid" property="id"/>
+            <result column="level_name" property="levelName"/>
+        </association>
+
+    </resultMap>
+
+
+    <insert id="addMember" parameterType="Member">
+        insert into  `member` (
+                    `avatar_url`,
+                    `balance_num`,
+                    `city`,
+                    `gender`,
+                    `invite_num`,
+                    `is_enable`,
+                    `is_partner`,
+                    `member_level_id`,
+                    `nick_name`,
+                    `open_id`,
+                    `phone`,
+                    `register_time`,
+                    `total_num`,
+                    `zeng_song_num`,
+                    `member_type`,
+                    `is_phone_auth`,
+                    `code`
+                )
+        values(
+                    #{avatarUrl},
+                    #{balanceNum},
+                    #{city},
+                    #{gender},
+                    #{inviteNum},
+                    #{isEnable},
+                    #{isPartner},
+                    #{memberLevelId},
+                    #{nickName},
+                    #{openId},
+                    #{phone},
+                    #{registerTime},
+                    #{totalNum},
+                    #{zengSongNum},
+                    #{memberType},
+                    #{isPhoneAuth},
+                    #{code}
+                )
+
+    </insert>
+
+
+    <select id="queryAll" resultMap="memberMap">
+       select m.*,l.id as lid,l.level_name as level_name from
+        `member` m , `member_level` l
+        where
+        <trim prefixOverrides="and"  >
+            <if test="isPartner != null">
+                and m.`is_partner` = #{isPartner}
+            </if>
+            <if test="memberType != null and memberType!=0">
+              and  m.`member_type` = #{memberType}
+            </if>
+            <if test="memberLevelId != null and memberLevelId!=0">
+                and  m.`member_level_id` = #{memberLevelId}
+            </if>
+            <if test="startTime != null">
+                <![CDATA[
+             and DATE_FORMAT(m.`register_time`, '%Y-%m-%d') >=  DATE_FORMAT(#{startTime}, '%Y-%m-%d')
+            ]]>
+            </if>
+            <if test="endTime != null">
+                <![CDATA[
+             and DATE_FORMAT(m.`register_time`, '%Y-%m-%d') <=  DATE_FORMAT(#{endTime}, '%Y-%m-%d')
+            ]]>
+            </if>
+
+            and m.member_level_id = l.id
+        </trim>
+
+       order by m.`register_time` desc
+   </select>
+
+    <select id="queryByMemberId" resultMap="memberMap">
+       select * from  `member` where id=#{id}
+   </select>
+
+
+    <update id="updateMember" parameterType="Member">
+    update  `member`
+    <trim prefix="set " suffixOverrides=","  suffix=" where id=#{id}">
+        <if test="avatarUrl != null and avatarUrl != ''">
+            `avatar_url` = #{avatarUrl},
+        </if>
+        <if test="balanceNum != null">
+            `balance_num` = #{balanceNum},
+        </if>
+        <if test="city != null and city != ''">
+            `city` = #{city},
+        </if>
+        <if test="gender != null">
+            `gender` = #{gender},
+        </if>
+        <if test="inviteNum != null">
+            `invite_num` = #{inviteNum},
+        </if>
+        <if test="isEnable != null">
+            `is_enable` = #{isEnable},
+        </if>
+        <if test="isPartner != null">
+            `is_partner` = #{isPartner},
+        </if>
+        <if test="memberLevelId != null">
+            `member_level_id` = #{memberLevelId},
+        </if>
+        <if test="nickName != null and nickName != ''">
+            `nick_name` = #{nickName},
+        </if>
+        <if test="openId != null and openId != ''">
+            `open_id` = #{openId},
+        </if>
+        <if test="phone != null and phone != ''">
+            `phone` = #{phone},
+        </if>
+        <if test="registerTime != null">
+            `register_time` = #{registerTime},
+        </if>
+        <if test="totalNum != null">
+            `total_num` = #{totalNum},
+        </if>
+        <if test="zengSongNum != null">
+            `zeng_song_num` = #{zengSongNum},
+        </if>
+        <if test="memberType != null">
+            `member_type` = #{memberType},
+        </if>
+        <if test="isPhoneAuth != null">
+            `is_phone_auth` = #{isPhoneAuth},
+        </if>
+    </trim>
+    </update>
+
+
+    <delete id="deleteById" parameterType="Integer">
+        delete from  `member` where id=#{id}
+    </delete>
+
+</mapper>
