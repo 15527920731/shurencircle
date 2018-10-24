@@ -24,6 +24,20 @@
         <result property="suitAge" column="suit_age"/>
         <result property="videoPath" column="video_path"/>
         <result property="releaseType" column="release_type"/>
+        <association property="member" javaType="Member">
+            <id column="mid" property="id"/>
+            <result column="nick_name" property="nickName"/>
+        </association>
+        <association property="usedGoodsCategoryOne" javaType="UsedGoodsCategory">
+            <id column="ucid" property="id"/>
+            <result column="category_name" property="categoryName"/>
+        </association>
+        <association property="usedGoodsCategoryTwo" javaType="UsedGoodsCategory">
+            <id column="ucid2" property="id"/>
+            <result column="category_name2" property="categoryName"/>
+        </association>
+
+
     </resultMap>
 
 
@@ -70,8 +84,60 @@
 
 
     <select id="queryAll" resultMap="usedGoodsMap">
-       select * from  `used_goods`
+       select u.*,m.id as mid,m.nick_name as nick_name,
+        c.id as ucid,c.`category_name` as category_name,
+        c2.id as ucid2,c2.`category_name` as category_name2
+        from  `used_goods` u,`member` m,
+        `used_goods_category` c ,`used_goods_category` c2 where
+        <trim prefixOverrides="and"  >
+        <if test="categoryOneId != null and categoryOneId!=0">
+            and u.`category_one_id` = #{categoryOneId}
+        </if>
+        <if test="categoryTwoId != null and categoryTwoId!=0">
+            and u.`category_two_id` = #{categoryTwoId}
+        </if>
+        <if test="releaseType != null and releaseType!=0">
+            and u.`release_type` = #{releaseType}
+        </if>
+        <if test="releaseType == null or releaseType==0">
+            and u.`release_type` = 1
+        </if>
+        <if test="status != null and status!=0">
+            and u.`status` = #{status}
+        </if>
+        <if test="startTime != null">
+            <![CDATA[
+         and DATE_FORMAT(u.`release_time`, '%Y-%m-%d') >=  DATE_FORMAT(#{startTime}, '%Y-%m-%d')
+        ]]>
+        </if>
+        <if test="endTime != null">
+            <![CDATA[
+         and DATE_FORMAT(u.`release_time`, '%Y-%m-%d') <=  DATE_FORMAT(#{endTime}, '%Y-%m-%d')
+        ]]>
+        </if>
+        and u.`member_id`=m.`id`
+            and u.`category_one_id`=c.`id`
+            and u.`category_two_id`=c2.`id`
+        </trim>
+
    </select>
+
+    <select id="queryUsedGoodsById" resultMap="usedGoodsMap">
+        select u.*,m.id as mid,m.nick_name as nick_name,
+        c.id as ucid,c.`category_name` as category_name,
+        c2.id as ucid2,c2.`category_name` as category_name2
+        from  `used_goods` u,`member` m,
+        `used_goods_category` c ,`used_goods_category` c2 where
+
+             u.`member_id`=m.`id`
+            and u.`category_one_id`=c.`id`
+            and u.`category_two_id`=c2.`id`
+            and u.`id`=#{id}
+
+    </select>
+
+
+
 
 
     <update id="updateUsedGoods" parameterType="UsedGoods">
@@ -110,10 +176,10 @@
         <if test="memberId != null ">
             `member_id` = #{memberId},
         </if>
-        <if test="releaseTime != null and releaseTime != ''">
+        <if test="releaseTime != null">
             `release_time` = #{releaseTime},
         </if>
-        <if test="sortTime != null and sortTime != ''">
+        <if test="sortTime != null">
             `sort_time` = #{sortTime},
         </if>
         <if test="status != null ">
@@ -125,7 +191,7 @@
         <if test="videoPath != null and videoPath != ''">
             `video_path` = #{videoPath},
         </if>
-        <if test="releaseType != null and releaseType != ''">
+        <if test="releaseType != null">
             `release_type` = #{releaseType},
         </if>
     </trim>

@@ -1,0 +1,353 @@
+<!--_meta 作为公共模版分离出去-->
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit|ie-comp|ie-stand">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+<link rel="Bookmark" th:href="@{/favicon.ico}" >
+<link rel="Shortcut Icon" th:href="@{/favicon.ico}" />
+<!--[if lt IE 9]>
+<script type="text/javascript" th:src="@{/lib/html5shiv.js}"></script>
+<script type="text/javascript" th:src="@{lib/respond.min.js}"></script>
+<![endif]-->
+<link rel="stylesheet" type="text/css" th:href="@{/h-ui/css/H-ui.min.css}" />
+<link rel="stylesheet" type="text/css" th:href="@{/h-ui.admin/css/H-ui.admin.css}" />
+<link rel="stylesheet" type="text/css" th:href="@{/lib/Hui-iconfont/1.0.8/iconfont.css}" />
+<link rel="stylesheet" type="text/css" th:href="@{/h-ui.admin/skin/default/skin.css}" id="skin" />
+<link rel="stylesheet" type="text/css" th:href="@{/h-ui.admin/css/style.css}" />
+<!--[if IE 6]>
+<script type="text/javascript" th:src="@{/lib/DD_belatedPNG_0.0.8a-min.js}" ></script>
+<script>DD_belatedPNG.fix('*');</script>
+<![endif]-->
+<!--/meta 作为公共模版分离出去-->
+
+
+<title>添加用户 - H-ui.admin v3.1</title>
+<meta name="keywords" content="H-ui.admin v3.1,H-ui网站后台模版,后台模版下载,后台管理系统模版,HTML后台模版下载">
+<meta name="description" content="H-ui.admin v3.1，是一款由国人开发的轻量级扁平化网站后台模板，完全免费开源的网站后台管理系统模版，适合中小型CMS后台系统。">
+</head>
+<body>
+<article class="page-container">
+	<form action="" method="post" class="form form-horizontal" id="form-member-add">
+		<input type="hidden" value="2" name="releaseType">
+
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>选择发布人：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<span  id="selectMember"></span>&nbsp;&nbsp;
+				<input onclick="member_select('选择发布人','/admin/usedgoods/selectMember','','510')" type="button" style="width: 200px;" class="input-text" value="关联发布人"  >
+
+			</div>
+		</div>
+
+
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>宝贝名称：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="" placeholder="" id="goodsName" name="goodsName">
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>宝贝描述：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<textarea type="text" class="textarea"  id="content" name="content"></textarea>
+			</div>
+		</div>
+
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>宝贝图片：</label>
+			<div class="formControls col-xs-8 col-sm-9" id="imgView">
+					<input  accept="image/png,image/gif,image/jpeg,image/bmp"  type="file" name="images" multiple id="images">
+			</div>
+		</div>
+
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>宝贝视频：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input  accept="video/3gpp,video/x-msvideo,video/mp4"  type="file" name="videos" multiple id="videos">
+			</div>
+		</div>
+
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>地址：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="" placeholder="" id="address" name="address">
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>成色：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<div class="radio-box">
+					<input name="chengSe" value="全新" type="radio" id="chengSe-1" checked>
+					<label for="chengSe-1">全新</label>
+				</div>
+				<div class="radio-box">
+					<input type="radio" value="8-9成新" id="chengSe-2" name="chengSe">
+					<label for="chengSe-2">8-9成新</label>
+				</div>
+				<div class="radio-box">
+					<input type="radio" value="其他" id="chengSe-3" name="chengSe">
+					<label for="chengSe-3">其他</label>
+				</div>
+
+			</div>
+		</div>
+
+
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>一级分类：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+			<select class="select" onchange="categoryChange();" id="categoryOneId" name="categoryOneId">
+				<option value="0">请选择</option>
+			</select>
+			</div>
+		</div>
+
+
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>二级分类：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<select class="select"   id="categoryTwoId" name="categoryTwoId">
+					<option value="0">请选择</option>
+				</select>
+			</div>
+		</div>
+
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>适用年龄：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<select class="select"   id="suitAge" name="suitAge">
+					<option value="0-1岁">0-1岁</option>
+					<option value="1-3岁">1-3岁</option>
+					<option value="3-6岁">3-6岁</option>
+				</select>
+			</div>
+		</div>
+
+
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>交货方式：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<div class="radio-box">
+					<input type="radio" value="2" id="deliveryType-2" name="deliveryType" checked>
+					<label for="chengSe-2">面交</label>
+				</div>
+				<div class="radio-box">
+					<input name="deliveryType" value="1" type="radio" id="deliveryType-1" >
+					<label for="chengSe-1">快递</label>
+				</div>
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>快递费用：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="" placeholder="面交不需要填写" id="deliveryMoney" name="deliveryMoney">
+			</div>
+		</div>
+
+
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>是否启用：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<select  id="isEnable" name="isEnable" class="select">
+					<option value="0" selected>启用</option>
+					<option value="1">不启用</option>
+				</select>
+			</div>
+		</div>
+
+
+
+		<div class="row cl">
+			<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+				<input class="btn btn-primary radius" type="submit" value="&nbsp;&nbsp;提交&nbsp;&nbsp;">
+				<input class="btn btn-info radius" onclick="history.go(-1);" type="button" value="&nbsp;&nbsp;返回&nbsp;&nbsp;">
+			</div>
+		</div>
+	</form>
+</article>
+
+<!--_footer 作为公共模版分离出去-->
+<script type="text/javascript" th:src="@{/lib/jquery/1.9.1/jquery.min.js}"></script>
+<script type="text/javascript" th:src="@{/lib/layer/2.4/layer.js}"></script>
+<script type="text/javascript" th:src="@{/h-ui/js/H-ui.min.js}"></script>
+<script type="text/javascript" th:src="@{/h-ui.admin/js/H-ui.admin.js}"></script> <!--/_footer 作为公共模版分离出去-->
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" th:src="@{/lib/My97DatePicker/4.8/WdatePicker.js}"></script>
+<script type="text/javascript" th:src="@{/lib/jquery.validation/1.14.0/jquery.validate.js}"></script>
+<script type="text/javascript" th:src="@{/lib/jquery.validation/1.14.0/validate-methods.js}"></script>
+<script type="text/javascript" th:src="@{/lib/jquery.validation/1.14.0/messages_zh.js}"></script>
+<script type="text/javascript">
+
+
+
+
+
+
+
+
+
+$(function(){
+	$('.skin-minimal input').iCheck({
+		checkboxClass: 'icheckbox-blue',
+		radioClass: 'iradio-blue',
+		increaseArea: '20%'
+	});
+
+	$("#form-member-add").validate({
+		rules:{
+			/*username:{
+				required:true,
+				minlength:2,
+				maxlength:16
+			},*/
+            goodsName:{
+				required:true,
+			},
+            content:{
+                required:true,
+            },
+            images:{
+                required:true,
+            },
+            videos:{
+                required:true,
+            },
+            address:{
+                required:true,
+            },
+            chengSe:{
+                required:true,
+            },
+            categoryOneId:{
+                required:true,
+            },
+            categoryTwoId:{
+                required:true,
+            },
+            isEnable:{
+        		required:true,
+    		},
+
+            memberId:{
+        		required:true,
+    		},
+			/*mobile:{
+				required:true,
+				isMobile:true,
+			},
+			email:{
+				required:true,
+				email:true,
+			},
+			uploadfile:{
+				required:true,
+			},*/
+
+		},
+		onkeyup:false,
+		focusCleanup:true,
+		success:"valid",
+		submitHandler:function(form){
+            $("#form-member-add").ajaxSubmit({
+                url:"/admin/usedgoods/addusedgoods",
+                type:"post",
+                dataType:"json",
+                async:false,
+                success:function(data){
+                    if(data.code==200){
+                        alert("保存信息成功");
+                        var index = parent.layer.getFrameIndex(window.name);
+                        //parent.$('.btn-success').click();
+
+                        window.location.href="/admin/usedgoods/usedgoodslist";
+                        parent.layer.close(index);
+                    }else{
+                        alert("保存信息失败");
+                        var index = parent.layer.getFrameIndex(window.name);
+                        parent.layer.close(index);
+                    }
+                }})
+		}
+	});
+
+
+
+
+
+
+
+
+    $.ajax({
+        type: 'POST',
+        url: '/admin/usedgoods/ajaxcategorylist',
+        dataType: 'json',
+        success: function(data){
+            /*   <select class="select" style="width: 100px;" id="categoryOneId" name="categoryOneId">
+                       <option value="0">请选择</option>
+                       <option value="">m.categoryName</option>
+
+                       </select>*/
+            var text="<option value=\"0\">请选择</option>";
+            for(var i=0;i<data.data.length;i++){
+                text=text+"<option value='"+data.data[i].id+"'>"+data.data[i].categoryName+"</option>";
+            }
+            $("#categoryOneId").html(text)
+
+        },
+        error:function(data) {
+            console.log(data.msg);
+        },
+    });
+
+
+
+
+
+
+
+
+
+
+
+});
+
+
+function  categoryChange() {
+    $.ajax({
+        type: 'POST',
+        url: '/admin/usedgoods/ajaxcategorylist?parentId=' + $("#categoryOneId").val(),
+        dataType: 'json',
+        success: function (data) {
+            var text = "<option value=\"0\">请选择</option>";
+            for (var i = 0; i < data.data.length; i++) {
+                text = text + "<option value='" + data.data[i].id + "'>" + data.data[i].categoryName + "</option>";
+            }
+            $("#categoryTwoId").html(text)
+
+        },
+        error: function (data) {
+            console.log(data.msg);
+        },
+    });
+}
+
+
+
+
+function member_select(title,url,w,h){
+    layer_show(title,url,w,h);
+}
+
+
+function parentselect(id,name) {
+	$("#selectMember").html("<input value='"+id+"'  id='memberId' name='memberId' type='hidden'>"+name);
+}
+</script>
+<!--/请在上方写此页面业务相关的脚本-->
+</body>
+</html>

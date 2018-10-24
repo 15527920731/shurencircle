@@ -3,12 +3,14 @@ package com.shurencircle.controller;
 import com.shurencircle.entity.Recommend;
 import com.shurencircle.enums.ResultEnum;
 import com.shurencircle.service.RecommendService;
+import com.shurencircle.service.UsedGoodsService;
 import com.shurencircle.utils.ImageUtil;
 import com.shurencircle.utils.Result;
 import com.shurencircle.vo.ResultVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -22,9 +24,11 @@ import java.util.Date;
 public class RecommendController {
     @Autowired
     private RecommendService recommendService;
+    @Autowired
+    private UsedGoodsService usedGoodsService;
     @RequestMapping("/recommendlist")
     public String recommendlist(Model model){
-        model.addAttribute("recommendlist",recommendService.queryAll(1));
+        model.addAttribute("recommendlist",recommendService.queryAll());
         return "recommend-list";
     }
     @RequestMapping("/recommendaddUI/{type}")
@@ -106,7 +110,7 @@ public class RecommendController {
     //虚拟宝贝推荐管理
     @RequestMapping("/recommendgoodlist")
     public String recommendgoodlist(Model model){
-        model.addAttribute("recommendgoodslist",recommendService.queryAll(2));
+        model.addAttribute("recommendgoodslist",recommendService.queryRecommendGoods());
         return "recommend-goods-list";
     }
 
@@ -114,6 +118,30 @@ public class RecommendController {
     public String recommendgoodlist(){
         return "recommend-goods-add";
     }
+
+    //关联宝贝--宝贝详情
+    //闲置物列表
+    @RequestMapping("/usedgoodslist")
+    public String usedgoodslist(@RequestParam(required = false)  Integer categoryOneId,
+                                @RequestParam(required = false) Integer categoryTwoId ,
+                                @RequestParam(required = false) Integer releaseType ,
+                                @RequestParam(required = false) Integer status ,
+                                @RequestParam(required = false) Date startTime ,
+                                @RequestParam(required = false) Date endTime,
+                                Model model
+    ){
+        model.addAttribute("usedgoodslist",
+                usedGoodsService.queryAll(categoryOneId,categoryTwoId ,releaseType ,
+                        status ,startTime ,endTime));
+        if(StringUtils.isEmpty(releaseType))
+            releaseType=1;
+        model.addAttribute("releaseType",releaseType);
+        model.addAttribute("startTime",startTime);
+        model.addAttribute("endTime",endTime);
+        return "recommend-usedgoods-select";
+    }
+
+
 
 
 

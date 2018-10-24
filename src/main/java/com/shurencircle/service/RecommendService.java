@@ -10,7 +10,9 @@ import java.util.Map;
 
 public interface RecommendService {
 
-    List<Recommend> queryAll(Integer type);
+    List<Recommend> queryAll();
+
+    List<Recommend> queryRecommendGoods();
 
     Recommend queryRecommendById(Integer id);
 

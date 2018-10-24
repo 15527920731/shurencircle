@@ -5,7 +5,10 @@ import net.coobird.thumbnailator.Thumbnails;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 
 
 public class ImageUtil {
@@ -40,7 +43,7 @@ public class ImageUtil {
 
     /**
      * 上传文件
-     * @param file  上传的文件
+     * @param file  上传的文件---不压缩
      * @param targetAddr  目标路径---  相对路径   /img
      * @param imgBasePath  图片存储路径---绝对路径  E:/test/shurencircle
      * @return
@@ -53,8 +56,17 @@ public class ImageUtil {
         String relativeAddr = targetAddr + realFileName + extension;
         File dest = new File(imgBasePath+ relativeAddr);
         try {
-            System.out.println("dest"+dest);
-            Thumbnails.of(file.getInputStream()).size(337, 640).outputQuality(0.9f).toFile(dest);
+          /*  System.out.println("dest"+dest);
+            Thumbnails.of(file.getInputStream()).size(337, 640).outputQuality(0.9f).toFile(dest);*/
+            FileInputStream fileInputStream = (FileInputStream) file.getInputStream();
+            BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(dest));
+            byte[] bs = new byte[1024];
+            int len;
+            while ((len = fileInputStream.read(bs)) != -1) {
+                bos.write(bs, 0, len);
+            }
+            bos.flush();
+            bos.close();
 
         } catch (Exception e) {
             //throw new DichanException(ResultEnum.CREATE_THUMBNAIL);

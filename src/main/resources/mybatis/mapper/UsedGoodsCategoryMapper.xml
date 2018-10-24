@@ -36,7 +36,7 @@
         <if test="parentCategoryId != null and parentCategoryId!='' and parentCategoryId!=-1">
             `parent_category_id` = #{parentCategoryId}
         </if>
-        <if test="parentCategoryId == null or parentCategoryId==-1">
+        <if test="parentCategoryId == null or parentCategoryId=='' or parentCategoryId==-1">
             `parent_category_id` is null
         </if>
 

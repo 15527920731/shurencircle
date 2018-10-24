@@ -76,6 +76,7 @@ public class Recommend implements Serializable {
 	 * 闲置物id
 	 */
 	private Long usedGoodsId;
+	private UsedGoods usedGoods;
 
 	private Date createTime;
 

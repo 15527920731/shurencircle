@@ -18,8 +18,13 @@ public class RecommendServiceImpl  implements RecommendService {
 
 
     @Override
-    public List<Recommend> queryAll(Integer type) {
-        return recommendMapper.queryAll(type);
+    public List<Recommend> queryAll() {
+        return recommendMapper.queryAll();
+    }
+
+    @Override
+    public List<Recommend> queryRecommendGoods() {
+        return recommendMapper.queryRecommendGoods();
     }
 
     @Override

@@ -16,6 +16,20 @@
         <result property="url" column="url"/>
         <result property="createTime" column="create_time"/>
         <result property="usedGoodsId" column="used_goods_id"/>
+
+        <association property="usedGoods" javaType="UsedGoods">
+            <id column="uid" property="id"/>
+            <result column="goods_name" property="goodsName"/>
+            <association property="usedGoodsCategoryOne" javaType="UsedGoodsCategory">
+                <id column="cid1" property="id"/>
+                <result column="category_name1" property="categoryName"/>
+            </association>
+            <association property="usedGoodsCategoryTwo" javaType="UsedGoodsCategory">
+                <id column="cid2" property="id"/>
+                <result column="category_name2" property="categoryName"/>
+            </association>
+        </association>
+
     </resultMap>
 
 
@@ -45,15 +59,22 @@
     </insert>
 
 
-    <select id="queryAll" resultMap="recommendMap">
-        <if test="type==1">
+    <select id="queryAll" resultType="Recommend">
        select * from  `recommend` where  `used_goods_id` is null
-        </if>
-        <if test="type==2">
-            select * from  `recommend` where `used_goods_id` is not null
-        </if>
-
    </select>
+
+    <select id="queryRecommendGoods" resultMap="recommendMap">
+       select r.*,u.id as uid,u.`goods_name` as `goods_name`,
+       c1.`id` as cid1,c1.`category_name` as `category_name1`,
+       c2.`id` as cid2,c2.`category_name` as `category_name2`
+       from  `recommend` r,`used_goods` u,
+       `used_goods_category` c1,`used_goods_category` c2
+        where  r.`used_goods_id`=u.`id`
+        and u.`category_one_id`=c1.`id`
+        and u.`category_two_id`=c2.`id`
+   </select>
+
+
 
     <select id="queryRecommendById" resultMap="recommendMap">
        select * from  `recommend` where `id`=#{id}

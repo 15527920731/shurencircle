@@ -5,7 +5,9 @@ import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 public interface RecommendMapper{
-    List<Recommend> queryAll(@Param("type")Integer type);
+    List<Recommend> queryAll();
+
+    List<Recommend> queryRecommendGoods();
 
     Recommend queryRecommendById(@Param("id")Integer id);
 

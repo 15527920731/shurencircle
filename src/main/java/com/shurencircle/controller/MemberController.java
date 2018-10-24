@@ -3,11 +3,13 @@ package com.shurencircle.controller;
 import com.shurencircle.entity.Member;
 import com.shurencircle.entity.MemberLevel;
 import com.shurencircle.entity.MemberShippingAddress;
+import com.shurencircle.exception.GlobleException;
 import com.shurencircle.service.MemberLevelService;
 import com.shurencircle.service.MemberService;
 import com.shurencircle.service.MemberShippingAddressService;
 import com.shurencircle.utils.ImageUtil;
 import com.shurencircle.utils.Result;
+import com.shurencircle.utils.UUIDUtils;
 import com.shurencircle.vo.ResultVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -52,7 +54,8 @@ public class MemberController {
                        @RequestParam(required = false)String memberType,
                        @RequestParam(required = false)String memberLevelId,
                        @RequestParam(required = false)Date startTime,
-                       @RequestParam(required = false)Date endTime ){
+                       @RequestParam(required = false)Date endTime )
+                        {
         List<Member> memberList= memberService.queryAll(isPartner,memberType,memberLevelId,startTime,endTime);
         model.addAttribute("memberList",memberList);
         if(!StringUtils.isEmpty(isPartner))
@@ -82,6 +85,7 @@ public class MemberController {
     public ResultVO memberadd(Member member, @RequestParam(value = "avatarurl") MultipartFile avatarurl){
         String path=ImageUtil.generateNormalImg(avatarurl,"/img/","E:/test/shurencircle");
         member.setAvatarUrl(path);
+        member.setCode(UUIDUtils.generateUUID());
         memberService.addMember(member);
         return Result.success();
     }
@@ -147,6 +151,7 @@ public class MemberController {
     public ResultVO addlevel(MemberLevel memberLevel,@RequestParam(value = "levelIco") MultipartFile levelIco){
         String path=ImageUtil.generateNormalImg(levelIco,"/img/","E:/test/shurencircle");
         memberLevel.setLevelIcon(path);
+
         memberLevelService.addMemberLevel(memberLevel);
         return Result.success();
     }

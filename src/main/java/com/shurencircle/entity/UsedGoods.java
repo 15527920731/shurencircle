@@ -26,10 +26,12 @@ public class UsedGoods implements Serializable {
 	 * 
 	 */
 	private Long categoryOneId;
+	private UsedGoodsCategory usedGoodsCategoryOne;
 	/**
 	 * 
 	 */
 	private Long categoryTwoId;
+	private UsedGoodsCategory usedGoodsCategoryTwo;
 	/**
 	 * 
 	 */
@@ -43,9 +45,18 @@ public class UsedGoods implements Serializable {
 	 */
 	private BigDecimal deliveryMoney;
 	/**
-	 * 交货方式
+	 * 交货方式 1 快递 2 面交
 	 */
 	private Integer deliveryType;
+	private String deliveryTypeName;
+
+	public String getDeliveryTypeName() {
+		if(deliveryType==1){
+			return "快递";
+		}
+		return "面交";
+	}
+
 	/**
 	 * 
 	 */
@@ -62,6 +73,7 @@ public class UsedGoods implements Serializable {
 	 * 
 	 */
 	private Long memberId;
+	private Member member;
 	/**
 	 * 发布时间
 	 */
@@ -71,9 +83,18 @@ public class UsedGoods implements Serializable {
 	 */
 	private Date sortTime;
 	/**
-	 * 宝贝状态 待赠 0已上架 1已撤销  2已赠
+	 * 宝贝状态 1待赠 2已赠     --0已上架 1已撤销
 	 */
 	private Integer status;
+	private String statusName;
+
+	public String getStatusName() {
+		if(status==1){
+			return "待赠";
+		}
+		return "已赠";
+	}
+
 	/**
 	 * 适用年龄
 	 */
@@ -86,8 +107,14 @@ public class UsedGoods implements Serializable {
 	 * 发布类型 1 真实发布 2 虚拟发布
 	 */
 	private Integer releaseType;
+	private String releaseTypeName;
 
+	public String getReleaseTypeName() {
+		if(releaseType==1){
+			return "真实发布";
+		}
+		return "虚拟发布";
+	}
 
-
-
+	private Date createTime;
 }
